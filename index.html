@@ -6,7 +6,6 @@
 <title>Панель управления</title>
 <style>
   :root {
-    /* Темная тема (по умолчанию) */
     --bg: #161616;
     --card: #1C1C1C;
     --border: #2A2A2A;
@@ -22,10 +21,10 @@
     --red: #E04A4A;
     --input-bg: #222222;
     --badge-bg: rgba(47,127,230,.15);
+    --nav-bg: #1A1A1A;
   }
 
   [data-theme="light"] {
-    /* Светлая тема */
     --bg: #F5F5F7;
     --card: #FFFFFF;
     --border: #E5E5EA;
@@ -41,6 +40,7 @@
     --red: #FF3B30;
     --input-bg: #F2F2F7;
     --badge-bg: rgba(0,122,255,0.1);
+    --nav-bg: #FFFFFF;
   }
 
   *{box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
@@ -50,38 +50,61 @@
     -webkit-font-smoothing:antialiased;
     font-size:14px;
     line-height:1.4;
-    padding-bottom:40px;
+    padding-bottom:70px;
   }
-  .wrap{max-width:420px;margin:0 auto;padding:24px 16px 24px;}
-  section{margin-bottom:32px;}
-  section:last-child{margin-bottom:0;}
-
+  .wrap{max-width:420px;margin:0 auto;padding:16px;}
+  
   /* Шапка сайта */
   .top-bar {
     display: flex;
-    justify-content: flex-end;
-    margin-bottom: -10px;
-    padding: 0 16px;
-    max-width: 420px;
-    margin: 0 auto;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
   }
+  .top-bar h1 { margin: 0; font-size: 20px; font-weight: 600; color: var(--text-bright); }
   .theme-toggle {
     background: var(--card);
     border: 1px solid var(--border);
     border-radius: 50%;
-    width: 36px;
-    height: 36px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    color: var(--text);
+    width: 36px; height: 36px;
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer; color: var(--text);
     transition: all 0.2s ease;
   }
-  .theme-toggle:hover {
-    background: var(--input-bg);
-  }
+  .theme-toggle:hover { background: var(--input-bg); }
   .theme-toggle svg { width: 18px; height: 18px; }
+
+  /* Навигация (табы) */
+  .tabs {
+    display: flex;
+    gap: 4px;
+    background: var(--nav-bg);
+    padding: 4px;
+    border-radius: 12px;
+    margin-bottom: 20px;
+    border: 1px solid var(--border);
+  }
+  .tab {
+    flex: 1;
+    text-align: center;
+    padding: 8px 0;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--muted);
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+  .tab.active {
+    background: var(--card);
+    color: var(--text-bright);
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+  }
+
+  /* Контент вкладок */
+  .tab-content { display: none; animation: fadeIn 0.2s ease; }
+  .tab-content.active { display: block; }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
 
   .sec-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;}
   .sec-head h2{margin:0;font-size:18px;font-weight:600;color:var(--text-bright);}
@@ -89,7 +112,7 @@
 
   .add-btn{
     background:transparent;border:1px solid var(--border);
-    color:var(--accent);font-size:13px;padding:4px 10px;
+    color:var(--accent);font-size:13px;padding:6px 12px;
     border-radius:8px;cursor:pointer;font-weight:500;
     transition: background 0.2s ease;
   }
@@ -103,149 +126,161 @@
     margin-bottom:8px;
     transition:background 0.2s ease,border-color 0.2s ease;
   }
-  .card:last-child{margin-bottom:0;}
 
-  /* Ввод канала/поста */
-  .input-row{display:flex;gap:8px;margin-bottom:12px;}
-  .input-row input{
-    flex:1;background:var(--input-bg);border:1px solid var(--border);
-    color:var(--text);border-radius:10px;padding:10px 12px;outline:none;
-    font-family:inherit;font-size:14px;
+  /* Поля ввода */
+  .input-group { display: flex; flex-direction: column; gap: 8px; margin-bottom: 12px; }
+  .input-group input, .input-group select, .input-group textarea {
+    background:var(--input-bg); border:1px solid var(--border);
+    color:var(--text); border-radius:10px; padding:12px;
+    outline:none; font-family:inherit; font-size:14px; width: 100%;
     transition: border-color 0.2s ease;
   }
-  .input-row input:focus{border-color:var(--accent);}
-  .input-row button{
-    background:var(--accent);color:#fff;border:none;
-    border-radius:10px;padding:0 16px;font-weight:600;cursor:pointer;
-    transition: background 0.2s ease;
+  .input-group input:focus, .input-group textarea:focus { border-color:var(--accent); }
+  .btn-submit {
+    background:var(--accent); color:#fff; border:none;
+    border-radius:10px; padding:12px; font-weight:600; cursor:pointer;
+    transition: background 0.2s ease; font-family: inherit; font-size: 14px;
   }
-  .input-row button:hover { background: var(--accent-hover); }
+  .btn-submit:hover { background: var(--accent-hover); }
 
-  /* Комментарии */
-  .cmt{display:flex;align-items:flex-start;gap:12px;cursor:pointer;}
-  .cmt:hover{background:var(--input-bg);}
-  .cb{
-    width:24px;height:24px;border-radius:6px;flex:0 0 24px;
-    border:2px solid var(--border-soft);background:transparent;
-    display:flex;align-items:center;justify-content:center;
-    margin-top:2px;transition:background .12s ease,border-color .12s ease;
+  /* Аккаунты */
+  .acc { display: flex; align-items: center; gap: 12px; }
+  .avatar {
+    width: 44px; height: 44px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 600; font-size: 15px; flex: 0 0 44px;
   }
-  .cb svg{opacity:0;transition:opacity .12s ease;}
-  .cmt.checked .cb{background:var(--accent);border-color:var(--accent);}
-  .cmt.checked .cb svg{opacity:1;}
-  .cmt-body{flex:1;min-width:0;}
-  .cmt-title{font-size:16px;color:var(--text-bright);font-weight:500;}
-  .cmt-title a{color:var(--accent);text-decoration:none;}
-  .cmt-title a:hover{text-decoration:underline;}
-  .cmt-title .meta{color:var(--muted);font-weight:400;font-size:13px;}
-  .cmt-text{font-size:14px;color:var(--muted);margin-top:3px;word-wrap:break-word;}
+  .av-blue { background:#0D2A4F; color:#4A9EFF; }
+  .av-purple { background:#2A1F55; color:#8B7CF6; }
+  [data-theme="light"] .av-blue { background:#E1F0FF; color:#007AFF; }
+  [data-theme="light"] .av-purple { background:#F0E6FF; color:#5856D6; }
+  .acc-body { flex: 1; min-width: 0; }
+  .acc-title { font-size: 16px; color: var(--text-bright); font-weight: 500; }
+  .acc-sub { font-size: 13px; color: var(--muted); margin-top: 2px; }
 
-  /* Рассылка */
-  .tiles{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px;}
-  .tile{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:16px;}
-  .tile-label{font-size:14px;color:var(--muted);}
-  .tile-value{font-size:32px;font-weight:400;color:var(--text-bright);margin-top:6px;}
+  /* Бейджи */
+  .badge { border-radius: 999px; padding: 4px 10px; font-size: 12px; font-weight: 500; white-space: nowrap; }
+  .badge.active { background: rgba(45,184,77,.15); color: var(--green); }
+  .badge.login { background: rgba(240,160,48,.15); color: var(--orange); }
+  .badge.run { background: rgba(47,127,230,.15); color: var(--accent-soft); }
 
-  .progress{height:6px;border-radius:999px;background:var(--border);overflow:hidden;margin-bottom:12px;}
-  .progress-fill{height:100%;background:var(--accent);border-radius:999px;width:0;transition:width .5s ease;}
+  /* Чекбоксы в комментариях */
+  .cmt { display: flex; align-items: flex-start; gap: 12px; cursor: pointer; }
+  .cb {
+    width: 24px; height: 24px; border-radius: 6px; flex: 0 0 24px;
+    border: 2px solid var(--border-soft); background: transparent;
+    display: flex; align-items: center; justify-content: center;
+    margin-top: 2px; transition: all .12s ease;
+  }
+  .cb svg { opacity: 0; }
+  .cmt.checked .cb { background: var(--accent); border-color: var(--accent); }
+  .cmt.checked .cb svg { opacity: 1; }
+  .cmt-body { flex: 1; min-width: 0; }
+  .cmt-title { font-size: 16px; color: var(--text-bright); font-weight: 500; }
+  .cmt-title a { color: var(--accent); text-decoration: none; }
+  .cmt-title a:hover { text-decoration: underline; }
+  .cmt-text { font-size: 14px; color: var(--muted); margin-top: 3px; }
 
-  .btns{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
-  .btn{
-    height:48px;border-radius:12px;background:transparent;
-    border:1px solid var(--border-soft);color:var(--text);
-    font-size:14px;font-weight:500;
-    display:flex;align-items:center;justify-content:center;gap:6px;
-    cursor:pointer;font-family:inherit;
-    transition: all 0.2s ease;
-  }
-  .btn:hover{background:var(--input-bg);}
-  .btn-primary{background:var(--accent);border-color:var(--accent);color:#fff;}
-  .btn-primary:hover{background:var(--accent-hover);}
+  /* Прогресс-бар */
+  .progress { height: 6px; border-radius: 999px; background: var(--border); overflow: hidden; margin-bottom: 12px; }
+  .progress-fill { height: 100%; background: var(--accent); border-radius: 999px; width: 0; transition: width .5s ease; }
+  
+  .tiles { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 12px; }
+  .tile { background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 16px; }
+  .tile-label { font-size: 14px; color: var(--muted); }
+  .tile-value { font-size: 32px; font-weight: 400; color: var(--text-bright); margin-top: 6px; }
 
-  /* Модалка */
-  .modal-overlay{
-    position:fixed;inset:0;background:rgba(0,0,0,0.5);
-    display:none;align-items:center;justify-content:center;z-index:100;
-    backdrop-filter: blur(4px);
+  .btns { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  .btn {
+    height: 48px; border-radius: 12px; background: transparent;
+    border: 1px solid var(--border-soft); color: var(--text);
+    font-size: 14px; font-weight: 500; display: flex; align-items: center; justify-content: center;
+    cursor: pointer; font-family: inherit; transition: all 0.2s ease;
   }
-  .modal-overlay.active{display:flex;}
-  .modal{
-    background:var(--card);border:1px solid var(--border);
-    border-radius:16px;padding:20px;width:90%;max-width:360px;
-  }
-  .modal h3{margin:0 0 16px 0;font-size:18px;color:var(--text-bright);}
-  .modal input{
-    width:100%;background:var(--input-bg);border:1px solid var(--border);
-    color:var(--text);border-radius:10px;padding:12px;margin-bottom:12px;
-    outline:none;font-family:inherit;
-  }
-  .modal-actions{display:flex;gap:8px;justify-content:flex-end;}
-  .modal-actions button{
-    padding:10px 16px;border-radius:10px;border:none;cursor:pointer;
-    font-family:inherit;font-weight:500;
-  }
-  .modal-actions .cancel{background:var(--border);color:var(--text);}
-  .modal-actions .confirm{background:var(--accent);color:#fff;}
+  .btn:hover { background: var(--input-bg); }
+  .btn-primary { background: var(--accent); border-color: var(--accent); color: #fff; }
+  .btn-primary:hover { background: var(--accent-hover); }
 
   /* Список ручных юзеров */
-  .manual-user{
-    display:flex;justify-content:space-between;align-items:center;
-    padding:12px;border-bottom:1px solid var(--border);
+  .manual-user { display: flex; justify-content: space-between; align-items: center; padding: 12px; border-bottom: 1px solid var(--border); }
+  .manual-user:last-child { border-bottom: none; }
+  .manual-user a { color: var(--accent); text-decoration: none; font-weight: 500;}
+  .manual-user .remove { color: var(--red); cursor: pointer; font-size: 13px; }
+
+  /* Модальные окна */
+  .modal-overlay {
+    position: fixed; inset: 0; background: rgba(0,0,0,0.6);
+    display: none; align-items: center; justify-content: center; z-index: 100;
+    backdrop-filter: blur(4px); padding: 16px;
   }
-  .manual-user:last-child{border-bottom:none;}
-  .manual-user a{color:var(--accent);text-decoration:none;}
-  .manual-user .remove{color:var(--red);cursor:pointer;font-size:13px;}
+  .modal-overlay.active { display: flex; }
+  .modal {
+    background: var(--card); border: 1px solid var(--border);
+    border-radius: 16px; padding: 20px; width: 100%; max-width: 360px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+  }
+  .modal h3 { margin: 0 0 16px 0; font-size: 18px; color: var(--text-bright); }
+  .modal-actions { display: flex; gap: 8px; justify-content: flex-end; margin-top: 16px; }
+  .modal-actions button { padding: 10px 16px; border-radius: 10px; border: none; cursor: pointer; font-family: inherit; font-weight: 500; }
+  .modal-actions .cancel { background: var(--border); color: var(--text); }
+  .modal-actions .confirm { background: var(--accent); color: #fff; }
+
 </style>
 </head>
 <body>
 
-<div class="top-bar">
-  <div class="theme-toggle" id="theme-toggle">
-    <!-- Иконка луны (для темной темы) -->
-    <svg id="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-      <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
-    </svg>
-    <!-- Иконка солнца (для светлой темы) -->
-    <svg id="icon-sun" style="display:none;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-      <circle cx="12" cy="12" r="5"></circle>
-      <line x1="12" y1="1" x2="12" y2="3"></line>
-      <line x1="12" y1="21" x2="12" y2="23"></line>
-      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
-      <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
-      <line x1="1" y1="12" x2="3" y2="12"></line>
-      <line x1="21" y1="12" x2="23" y2="12"></line>
-      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
-      <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
-    </svg>
-  </div>
-</div>
-
 <div class="wrap">
-  <section>
-    <div class="sec-head">
-      <h2>Парсинг</h2>
+  <div class="top-bar">
+    <h1>Панель</h1>
+    <div class="theme-toggle" id="theme-toggle">
+      <svg id="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+      <svg id="icon-sun" style="display:none;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
     </div>
-    <div class="input-row">
+  </div>
+
+  <!-- Табы -->
+  <div class="tabs">
+    <div class="tab active" data-target="tab-accounts">Аккаунты</div>
+    <div class="tab" data-target="tab-parse">Парсинг</div>
+    <div class="tab" data-target="tab-manual">База</div>
+    <div class="tab" data-target="tab-mailing">Рассылка</div>
+  </div>
+
+  <!-- 1. АККАУНТЫ -->
+  <div id="tab-accounts" class="tab-content active">
+    <div class="sec-head">
+      <h2>Мои аккаунты</h2>
+      <button class="add-btn" id="btn-add-acc">+ Добавить</button>
+    </div>
+    <div id="accounts-list"></div>
+  </div>
+
+  <!-- 2. ПАРСИНГ -->
+  <div id="tab-parse" class="tab-content">
+    <div class="sec-head">
+      <h2>Сбор комментариев</h2>
+    </div>
+    <div class="input-group">
       <input type="text" id="parse-input" placeholder="@channel 12">
-      <button id="parse-btn">Найти</button>
+      <button class="btn-submit" id="parse-btn">Собрать</button>
     </div>
     <div id="comments"></div>
-  </section>
+  </div>
 
-  <section>
+  <!-- 3. РУЧНАЯ БАЗА -->
+  <div id="tab-manual" class="tab-content">
     <div class="sec-head">
       <h2>Ручное добавление</h2>
-      <button class="add-btn" id="add-manual-btn">+ Добавить</button>
+      <button class="add-btn" id="add-manual-btn">+ Юзера</button>
     </div>
-    <div id="manual-list" style="background:var(--card);border:1px solid var(--border);border-radius:14px; transition: background 0.2s ease;">
-      <!-- сюда падают юзеры -->
-    </div>
-  </section>
+    <div id="manual-list" style="background:var(--card);border:1px solid var(--border);border-radius:14px;"></div>
+  </div>
 
-  <section>
+  <!-- 4. РАССЫЛКА -->
+  <div id="tab-mailing" class="tab-content">
     <div class="sec-head">
       <h2>Рассылка</h2>
-      <span id="run-badge" style="font-size:13px;background:var(--badge-bg);color:var(--accent-soft);padding:4px 10px;border-radius:999px;">готово</span>
+      <span id="run-badge" class="badge run">готово</span>
     </div>
 
     <div class="tiles">
@@ -258,74 +293,90 @@
       <button class="btn" id="toggle-btn">⏸ Стоп</button>
       <button class="btn btn-primary" id="start-btn">🚀 Запуск</button>
     </div>
-  </section>
+  </div>
+
 </div>
 
-<!-- Модалка -->
-<div class="modal-overlay" id="modal">
+<!-- Модалка добавления аккаунта -->
+<div class="modal-overlay" id="modal-acc">
+  <div class="modal">
+    <h3>Новый аккаунт</h3>
+    <div class="input-group">
+      <input type="text" id="acc-phone" placeholder="+7 999 000-00-00">
+      <input type="text" id="acc-name" placeholder="Имя (для отображения)">
+    </div>
+    <div class="modal-actions">
+      <button class="cancel" onclick="document.getElementById('modal-acc').classList.remove('active')">Отмена</button>
+      <button class="confirm" id="modal-acc-confirm">Сохранить</button>
+    </div>
+  </div>
+</div>
+
+<!-- Модалка добавления юзера -->
+<div class="modal-overlay" id="modal-user">
   <div class="modal">
     <h3>Добавить юзера</h3>
-    <input type="text" id="manual-input" placeholder="@username или ID">
+    <div class="input-group">
+      <input type="text" id="manual-input" placeholder="@username или ID">
+    </div>
     <div class="modal-actions">
-      <button class="cancel" id="modal-cancel">Отмена</button>
-      <button class="confirm" id="modal-confirm">Добавить</button>
+      <button class="cancel" onclick="document.getElementById('modal-user').classList.remove('active')">Отмена</button>
+      <button class="confirm" id="modal-user-confirm">Добавить</button>
     </div>
   </div>
 </div>
 
 <script>
 (function(){
-  // --- Переключатель темы ---
+  // --- ТЕМА ---
   const themeToggle = document.getElementById('theme-toggle');
   const iconMoon = document.getElementById('icon-moon');
   const iconSun = document.getElementById('icon-sun');
-  
-  // Проверяем сохраненную тему или системные настройки
   const savedTheme = localStorage.getItem('theme');
-  const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
   
-  if (savedTheme === 'light' || (!savedTheme && !prefersDark)) {
+  if (savedTheme === 'light' || (!savedTheme && !window.matchMedia('(prefers-color-scheme: dark)').matches)) {
     document.documentElement.setAttribute('data-theme', 'light');
-    iconMoon.style.display = 'none';
-    iconSun.style.display = 'block';
-  } else {
-    document.documentElement.setAttribute('data-theme', 'dark');
-    iconMoon.style.display = 'block';
-    iconSun.style.display = 'none';
+    iconMoon.style.display = 'none'; iconSun.style.display = 'block';
   }
 
   themeToggle.addEventListener('click', () => {
-    const current = document.documentElement.getAttribute('data-theme');
-    if (current === 'light') {
+    const isLight = document.documentElement.getAttribute('data-theme') === 'light';
+    if (isLight) {
       document.documentElement.setAttribute('data-theme', 'dark');
       localStorage.setItem('theme', 'dark');
-      iconMoon.style.display = 'block';
-      iconSun.style.display = 'none';
+      iconMoon.style.display = 'block'; iconSun.style.display = 'none';
     } else {
       document.documentElement.setAttribute('data-theme', 'light');
       localStorage.setItem('theme', 'light');
-      iconMoon.style.display = 'none';
-      iconSun.style.display = 'block';
+      iconMoon.style.display = 'none'; iconSun.style.display = 'block';
     }
   });
 
-  // --- Состояние ---
-  let parsedUsers = []; 
-  let manualUsers = []; 
-  let sent = 0;
-  let isRunning = false;
-  let timer = null;
+  // --- ТАБЫ ---
+  const tabs = document.querySelectorAll('.tab');
+  const contents = document.querySelectorAll('.tab-content');
+  tabs.forEach(tab => {
+    tab.addEventListener('click', () => {
+      tabs.forEach(t => t.classList.remove('active'));
+      contents.forEach(c => c.classList.remove('active'));
+      tab.classList.add('active');
+      document.getElementById(tab.dataset.target).classList.add('active');
+    });
+  });
 
-  // --- DOM ---
-  const parseInput = document.getElementById('parse-input');
-  const parseBtn = document.getElementById('parse-btn');
+  // --- СОСТОЯНИЕ ---
+  let accounts = [
+    {id: 1, name: 'main', phone: '+7 914 *** ** 21', proxy: 'прокси вкл', status: 'active'},
+    {id: 2, name: 'work', phone: '+7 924 *** ** 08', proxy: 'без прокси', status: 'login'}
+  ];
+  let parsedUsers = [];
+  let manualUsers = [];
+  let sent = 0, isRunning = false, timer = null;
+
+  // --- ЭЛЕМЕНТЫ ---
+  const accountsList = document.getElementById('accounts-list');
   const commentsEl = document.getElementById('comments');
   const manualListEl = document.getElementById('manual-list');
-  const modal = document.getElementById('modal');
-  const manualInput = document.getElementById('manual-input');
-  const addManualBtn = document.getElementById('add-manual-btn');
-  const modalCancel = document.getElementById('modal-cancel');
-  const modalConfirm = document.getElementById('modal-confirm');
   const sentEl = document.getElementById('sent');
   const totalEl = document.getElementById('total');
   const pfillEl = document.getElementById('pfill');
@@ -333,21 +384,43 @@
   const startBtn = document.getElementById('start-btn');
   const runBadge = document.getElementById('run-badge');
 
-  function renderComments(){
-    if(parsedUsers.length === 0){
-      commentsEl.innerHTML = '<div style="color:var(--muted);font-size:13px;text-align:center;padding:20px;">Нет данных. Введи @канал и номер поста.</div>';
+  // --- РЕНДЕР АККАУНТОВ ---
+  function renderAccounts() {
+    accountsList.innerHTML = accounts.map(a => `
+      <div class="card acc">
+        <div class="avatar ${a.id === 1 ? 'av-blue' : 'av-purple'}">${a.name.substring(0,2).toUpperCase()}</div>
+        <div class="acc-body">
+          <div class="acc-title">${a.name} · @${a.name}_nick</div>
+          <div class="acc-sub">${a.phone} · ${a.proxy}</div>
+        </div>
+        <div class="badge ${a.status === 'active' ? 'active' : 'login'}">${a.status === 'active' ? 'активен' : 'нужен вход'}</div>
+      </div>
+    `).join('');
+  }
+
+  document.getElementById('btn-add-acc').addEventListener('click', () => {
+    document.getElementById('modal-acc').classList.add('active');
+  });
+  document.getElementById('modal-acc-confirm').addEventListener('click', () => {
+    const phone = document.getElementById('acc-phone').value;
+    const name = document.getElementById('acc-name').value || 'new_acc';
+    if (!phone) return;
+    accounts.push({ id: Date.now(), name: name, phone: phone, proxy: 'без прокси', status: 'login' });
+    renderAccounts();
+    document.getElementById('modal-acc').classList.remove('active');
+  });
+
+  // --- РЕНДЕР ПАРСИНГА ---
+  function renderComments() {
+    if (parsedUsers.length === 0) {
+      commentsEl.innerHTML = '<div style="color:var(--muted);font-size:13px;text-align:center;padding:20px;">Нет данных.</div>';
       return;
     }
     commentsEl.innerHTML = parsedUsers.map(c => `
       <div class="card cmt${c.checked ? ' checked' : ''}" data-id="${c.id}">
-        <div class="cb">
-          <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2.5 7.5L5.5 10.5L11.5 3.5" stroke="#fff" stroke-width="2" stroke-linecap="round"/></svg>
-        </div>
+        <div class="cb"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2.5 7.5L5.5 10.5L11.5 3.5" stroke="#fff" stroke-width="2" stroke-linecap="round"/></svg></div>
         <div class="cmt-body">
-          <div class="cmt-title">
-            <a href="https://t.me/${c.user.replace('@','')}" target="_blank">${c.user}</a>
-            <span class="meta">· пост ${c.post}</span>
-          </div>
+          <div class="cmt-title"><a href="https://t.me/${c.user.replace('@','')}" target="_blank">${c.user}</a> <span class="sec-meta">· пост ${c.post}</span></div>
           <div class="cmt-text">${c.text}</div>
         </div>
       </div>
@@ -355,9 +428,28 @@
     updateStats();
   }
 
-  function renderManual(){
-    if(manualUsers.length === 0){
-      manualListEl.innerHTML = '<div style="color:var(--muted);font-size:13px;text-align:center;padding:20px;">Список пуст.</div>';
+  document.getElementById('parse-btn').addEventListener('click', () => {
+    const q = document.getElementById('parse-input').value.trim();
+    if (!q) return;
+    parsedUsers = [
+      { id: 1, user: '@anna_k', post: q.split(' ')[1] || '12', text: '+ хочу, напиши', checked: true },
+      { id: 2, user: '@dmitry_v', post: q.split(' ')[1] || '12', text: '+', checked: true },
+      { id: 3, user: '@olga_s', post: q.split(' ')[1] || '14', text: 'класс', checked: true }
+    ];
+    renderComments();
+  });
+
+  commentsEl.addEventListener('click', e => {
+    const card = e.target.closest('.cmt');
+    if (!card || e.target.tagName === 'A') return;
+    const u = parsedUsers.find(x => x.id === Number(card.dataset.id));
+    if (u) { u.checked = !u.checked; renderComments(); }
+  });
+
+  // --- РУЧНАЯ БАЗА ---
+  function renderManual() {
+    if (manualUsers.length === 0) {
+      manualListEl.innerHTML = '<div style="color:var(--muted);font-size:13px;text-align:center;padding:20px;">Пусто</div>';
       return;
     }
     manualListEl.innerHTML = manualUsers.map(u => `
@@ -369,112 +461,63 @@
     updateStats();
   }
 
-  function updateStats(){
-    const checked = parsedUsers.filter(u => u.checked);
-    const total = checked.length + manualUsers.length;
-    totalEl.textContent = total;
-    pfillEl.style.width = total === 0 ? '0%' : (Math.min(100, (sent / total) * 100)) + '%';
-    sentEl.textContent = sent;
-  }
-
-  parseBtn.addEventListener('click', () => {
-    const query = parseInput.value.trim();
-    if(!query) return;
-    
-    parseBtn.textContent = '...';
-    parseBtn.disabled = true;
-    
-    setTimeout(() => {
-      const parts = query.split(' ');
-      const post = parts[1] || '12';
-      parsedUsers = [
-        {id: 1, user: '@anna_k', post: post, text: '+ хочу, напиши', checked: true},
-        {id: 2, user: '@dmitry_v', post: post, text: '+', checked: true},
-        {id: 3, user: '@olga_s', post: post, text: 'классный пост', checked: true},
-        {id: 4, user: '@max_p', post: post, text: 'а когда следующий?', checked: false}
-      ];
-      renderComments();
-      parseBtn.textContent = 'Найти';
-      parseBtn.disabled = false;
-    }, 800);
+  document.getElementById('add-manual-btn').addEventListener('click', () => {
+    document.getElementById('modal-user').classList.add('active');
+    document.getElementById('manual-input').value = '';
   });
-
-  commentsEl.addEventListener('click', e => {
-    const card = e.target.closest('.cmt');
-    if(!card) return;
-    if(e.target.tagName === 'A') return; // Игнорируем клик по ссылке
-    
-    const id = Number(card.dataset.id);
-    const u = parsedUsers.find(x => x.id === id);
-    if(u){ u.checked = !u.checked; renderComments(); }
-  });
-
-  addManualBtn.addEventListener('click', () => {
-    modal.classList.add('active');
-    manualInput.value = '';
-    manualInput.focus();
-  });
-
-  modalCancel.addEventListener('click', () => modal.classList.remove('active'));
-
-  modalConfirm.addEventListener('click', () => {
-    const val = manualInput.value.trim();
-    if(!val) return;
-    const username = val.startsWith('@') ? val : '@' + val;
-    manualUsers.push({ id: Date.now(), user: username });
+  document.getElementById('modal-user-confirm').addEventListener('click', () => {
+    const val = document.getElementById('manual-input').value.trim();
+    if (!val) return;
+    manualUsers.push({ id: Date.now(), user: val.startsWith('@') ? val : '@' + val });
     renderManual();
-    modal.classList.remove('active');
+    document.getElementById('modal-user').classList.remove('active');
   });
 
   manualListEl.addEventListener('click', e => {
-    if(e.target.classList.contains('remove')){
-      const id = Number(e.target.dataset.id);
-      manualUsers = manualUsers.filter(u => u.id !== id);
+    if (e.target.classList.contains('remove')) {
+      manualUsers = manualUsers.filter(u => u.id !== Number(e.target.dataset.id));
       renderManual();
     }
   });
 
-  startBtn.addEventListener('click', () => {
-    if(isRunning) return;
+  // --- РАССЫЛКА ---
+  function updateStats() {
     const total = parsedUsers.filter(u => u.checked).length + manualUsers.length;
-    if(total === 0){
-      alert('Нет получателей. Отметь комменты или добавь вручную.');
-      return;
-    }
-    isRunning = true;
-    sent = 0;
-    runBadge.textContent = 'идёт';
-    runBadge.style.color = 'var(--accent-soft)';
-    startBtn.disabled = true;
-    toggleBtn.disabled = false;
+    totalEl.textContent = total;
+    sentEl.textContent = sent;
+    pfillEl.style.width = total === 0 ? '0%' : (Math.min(100, (sent / total) * 100)) + '%';
+  }
+
+  startBtn.addEventListener('click', () => {
+    if (isRunning) return;
+    const total = parsedUsers.filter(u => u.checked).length + manualUsers.length;
+    if (total === 0) return alert('Нет получателей');
+    isRunning = true; sent = 0;
+    runBadge.textContent = 'идёт'; runBadge.style.color = 'var(--accent-soft)';
+    startBtn.disabled = true; toggleBtn.disabled = false;
     toggleBtn.textContent = '⏸ Стоп';
-    
     timer = setInterval(() => {
-      if(!isRunning) return;
-      sent++;
-      updateStats();
-      if(sent >= total){
-        stopMailing();
-      }
+      if (!isRunning) return;
+      sent++; updateStats();
+      if (sent >= total) stopMailing();
     }, 1000);
   });
 
   toggleBtn.addEventListener('click', () => {
-    if(isRunning) stopMailing();
-    else startBtn.click();
+    if (isRunning) stopMailing(); else startBtn.click();
   });
 
-  function stopMailing(){
-    isRunning = false;
-    clearInterval(timer);
-    runBadge.textContent = 'пауза';
-    runBadge.style.color = 'var(--muted)';
-    startBtn.disabled = false;
-    toggleBtn.textContent = '▶ Старт';
+  function stopMailing() {
+    isRunning = false; clearInterval(timer);
+    runBadge.textContent = 'пауза'; runBadge.style.color = 'var(--muted)';
+    startBtn.disabled = false; toggleBtn.textContent = '▶ Старт';
   }
 
+  // Init
+  renderAccounts();
   renderComments();
   renderManual();
+  updateStats();
 })();
 </script>
 </body>
