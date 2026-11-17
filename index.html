@@ -3,47 +3,97 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>Рассылка</title>
+<title>Панель управления</title>
 <style>
-  :root{
-    --bg:#161616;
-    --card:#1C1C1C;
-    --border:#2A2A2A;
-    --border-soft:#2E2E2E;
-    --text:#EDEDED;
-    --muted:#9A9A9A;
-    --accent:#2F7FE6;
-    --accent-soft:#4A90E2;
-    --green:#2DB84D;
-    --orange:#F0A030;
+  :root {
+    /* Темная тема (по умолчанию) */
+    --bg: #161616;
+    --card: #1C1C1C;
+    --border: #2A2A2A;
+    --border-soft: #2E2E2E;
+    --text: #EDEDED;
+    --text-bright: #FFFFFF;
+    --muted: #9A9A9A;
+    --accent: #2F7FE6;
+    --accent-hover: #3A8FEF;
+    --accent-soft: #4A90E2;
+    --green: #2DB84D;
+    --orange: #F0A030;
+    --red: #E04A4A;
+    --input-bg: #222222;
+    --badge-bg: rgba(47,127,230,.15);
   }
+
+  [data-theme="light"] {
+    /* Светлая тема */
+    --bg: #F5F5F7;
+    --card: #FFFFFF;
+    --border: #E5E5EA;
+    --border-soft: #D1D1D6;
+    --text: #1C1C1E;
+    --text-bright: #000000;
+    --muted: #8E8E93;
+    --accent: #007AFF;
+    --accent-hover: #0062CC;
+    --accent-soft: #3395FF;
+    --green: #34C759;
+    --orange: #FF9500;
+    --red: #FF3B30;
+    --input-bg: #F2F2F7;
+    --badge-bg: rgba(0,122,255,0.1);
+  }
+
   *{box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
-  html,body{margin:0;padding:0;background:var(--bg);color:var(--text);}
+  html,body{margin:0;padding:0;background:var(--bg);color:var(--text); transition: background 0.3s ease, color 0.3s ease;}
   body{
     font-family:-apple-system,BlinkMacSystemFont,"Roboto","Inter","Segoe UI",sans-serif;
     -webkit-font-smoothing:antialiased;
     font-size:14px;
     line-height:1.4;
+    padding-bottom:40px;
   }
-  .wrap{max-width:420px;margin:0 auto;padding:24px 16px 48px;}
-  section{margin-bottom:40px;}
+  .wrap{max-width:420px;margin:0 auto;padding:24px 16px 24px;}
+  section{margin-bottom:32px;}
   section:last-child{margin-bottom:0;}
 
+  /* Шапка сайта */
+  .top-bar {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: -10px;
+    padding: 0 16px;
+    max-width: 420px;
+    margin: 0 auto;
+  }
+  .theme-toggle {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 50%;
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    color: var(--text);
+    transition: all 0.2s ease;
+  }
+  .theme-toggle:hover {
+    background: var(--input-bg);
+  }
+  .theme-toggle svg { width: 18px; height: 18px; }
+
   .sec-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;}
-  .sec-head h2{margin:0;font-size:18px;font-weight:600;color:#fff;}
+  .sec-head h2{margin:0;font-size:18px;font-weight:600;color:var(--text-bright);}
   .sec-meta{font-size:13px;color:var(--muted);}
-  .sec-meta.count{white-space:nowrap;}
 
   .add-btn{
-    width:28px;height:28px;border-radius:8px;
     background:transparent;border:1px solid var(--border);
-    color:var(--text);font-size:18px;line-height:1;
-    display:flex;align-items:center;justify-content:center;
-    cursor:pointer;padding:0;
-    transition:background .15s ease;
+    color:var(--accent);font-size:13px;padding:4px 10px;
+    border-radius:8px;cursor:pointer;font-weight:500;
+    transition: background 0.2s ease;
   }
-  .add-btn:hover{background:#1F1F1F;}
-  .add-btn:active{background:#252525;}
+  .add-btn:hover{background:var(--input-bg);}
 
   .card{
     background:var(--card);
@@ -51,39 +101,32 @@
     border-radius:14px;
     padding:16px;
     margin-bottom:8px;
-    transition:background .15s ease,border-color .15s ease;
+    transition:background 0.2s ease,border-color 0.2s ease;
   }
   .card:last-child{margin-bottom:0;}
 
-  /* Аккаунты */
-  .acc{display:flex;align-items:center;gap:12px;cursor:pointer;}
-  .acc.selected{background:#16202E;border-color:#1F4E8F;}
-  .avatar{
-    width:44px;height:44px;border-radius:50%;
-    display:flex;align-items:center;justify-content:center;
-    font-weight:600;font-size:15px;flex:0 0 44px;
+  /* Ввод канала/поста */
+  .input-row{display:flex;gap:8px;margin-bottom:12px;}
+  .input-row input{
+    flex:1;background:var(--input-bg);border:1px solid var(--border);
+    color:var(--text);border-radius:10px;padding:10px 12px;outline:none;
+    font-family:inherit;font-size:14px;
+    transition: border-color 0.2s ease;
   }
-  .av-blue{background:#0D2A4F;color:#4A9EFF;}
-  .av-purple{background:#2A1F55;color:#8B7CF6;}
-  .acc-body{flex:1;min-width:0;}
-  .acc-title{font-size:16px;color:#fff;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
-  .acc-sub{font-size:13px;color:var(--muted);margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
-  .badge{
-    border-radius:999px;padding:4px 10px;font-size:13px;
-    white-space:nowrap;flex:0 0 auto;
+  .input-row input:focus{border-color:var(--accent);}
+  .input-row button{
+    background:var(--accent);color:#fff;border:none;
+    border-radius:10px;padding:0 16px;font-weight:600;cursor:pointer;
+    transition: background 0.2s ease;
   }
-  .badge.active{background:rgba(45,184,77,.15);color:var(--green);}
-  .badge.login{background:rgba(240,160,48,.15);color:var(--orange);}
-  .badge.run{background:rgba(47,127,230,.15);color:var(--accent-soft);}
-  .badge.pause{background:rgba(154,154,154,.15);color:var(--muted);}
+  .input-row button:hover { background: var(--accent-hover); }
 
   /* Комментарии */
   .cmt{display:flex;align-items:flex-start;gap:12px;cursor:pointer;}
-  .cmt:hover{background:#202020;}
-  .cmt:active{background:#232323;}
+  .cmt:hover{background:var(--input-bg);}
   .cb{
     width:24px;height:24px;border-radius:6px;flex:0 0 24px;
-    border:2px solid #3A3A3A;background:transparent;
+    border:2px solid var(--border-soft);background:transparent;
     display:flex;align-items:center;justify-content:center;
     margin-top:2px;transition:background .12s ease,border-color .12s ease;
   }
@@ -91,7 +134,9 @@
   .cmt.checked .cb{background:var(--accent);border-color:var(--accent);}
   .cmt.checked .cb svg{opacity:1;}
   .cmt-body{flex:1;min-width:0;}
-  .cmt-title{font-size:16px;color:#fff;font-weight:500;}
+  .cmt-title{font-size:16px;color:var(--text-bright);font-weight:500;}
+  .cmt-title a{color:var(--accent);text-decoration:none;}
+  .cmt-title a:hover{text-decoration:underline;}
   .cmt-title .meta{color:var(--muted);font-weight:400;font-size:13px;}
   .cmt-text{font-size:14px;color:var(--muted);margin-top:3px;word-wrap:break-word;}
 
@@ -99,252 +144,337 @@
   .tiles{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px;}
   .tile{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:16px;}
   .tile-label{font-size:14px;color:var(--muted);}
-  .tile-value{font-size:32px;font-weight:400;color:#fff;margin-top:6px;font-variant-numeric:tabular-nums;}
+  .tile-value{font-size:32px;font-weight:400;color:var(--text-bright);margin-top:6px;}
 
-  .progress-card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:16px;margin-bottom:8px;}
-  .progress{height:6px;border-radius:999px;background:#262626;overflow:hidden;}
+  .progress{height:6px;border-radius:999px;background:var(--border);overflow:hidden;margin-bottom:12px;}
   .progress-fill{height:100%;background:var(--accent);border-radius:999px;width:0;transition:width .5s ease;}
-  .status-line{font-size:13px;color:var(--muted);margin-top:10px;}
 
   .btns{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
   .btn{
     height:48px;border-radius:12px;background:transparent;
-    border:1px solid var(--border-soft);color:#fff;
+    border:1px solid var(--border-soft);color:var(--text);
     font-size:14px;font-weight:500;
     display:flex;align-items:center;justify-content:center;gap:6px;
-    cursor:pointer;transition:background .15s ease,border-color .15s ease;
-    font-family:inherit;
+    cursor:pointer;font-family:inherit;
+    transition: all 0.2s ease;
   }
-  .btn:hover{background:#1F1F1F;}
-  .btn:active{background:#252525;}
-  .btn:disabled{opacity:.5;cursor:default;}
+  .btn:hover{background:var(--input-bg);}
+  .btn-primary{background:var(--accent);border-color:var(--accent);color:#fff;}
+  .btn-primary:hover{background:var(--accent-hover);}
+
+  /* Модалка */
+  .modal-overlay{
+    position:fixed;inset:0;background:rgba(0,0,0,0.5);
+    display:none;align-items:center;justify-content:center;z-index:100;
+    backdrop-filter: blur(4px);
+  }
+  .modal-overlay.active{display:flex;}
+  .modal{
+    background:var(--card);border:1px solid var(--border);
+    border-radius:16px;padding:20px;width:90%;max-width:360px;
+  }
+  .modal h3{margin:0 0 16px 0;font-size:18px;color:var(--text-bright);}
+  .modal input{
+    width:100%;background:var(--input-bg);border:1px solid var(--border);
+    color:var(--text);border-radius:10px;padding:12px;margin-bottom:12px;
+    outline:none;font-family:inherit;
+  }
+  .modal-actions{display:flex;gap:8px;justify-content:flex-end;}
+  .modal-actions button{
+    padding:10px 16px;border-radius:10px;border:none;cursor:pointer;
+    font-family:inherit;font-weight:500;
+  }
+  .modal-actions .cancel{background:var(--border);color:var(--text);}
+  .modal-actions .confirm{background:var(--accent);color:#fff;}
+
+  /* Список ручных юзеров */
+  .manual-user{
+    display:flex;justify-content:space-between;align-items:center;
+    padding:12px;border-bottom:1px solid var(--border);
+  }
+  .manual-user:last-child{border-bottom:none;}
+  .manual-user a{color:var(--accent);text-decoration:none;}
+  .manual-user .remove{color:var(--red);cursor:pointer;font-size:13px;}
 </style>
 </head>
 <body>
+
+<div class="top-bar">
+  <div class="theme-toggle" id="theme-toggle">
+    <!-- Иконка луны (для темной темы) -->
+    <svg id="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+    </svg>
+    <!-- Иконка солнца (для светлой темы) -->
+    <svg id="icon-sun" style="display:none;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="12" cy="12" r="5"></circle>
+      <line x1="12" y1="1" x2="12" y2="3"></line>
+      <line x1="12" y1="21" x2="12" y2="23"></line>
+      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+      <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+      <line x1="1" y1="12" x2="3" y2="12"></line>
+      <line x1="21" y1="12" x2="23" y2="12"></line>
+      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+      <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+    </svg>
+  </div>
+</div>
+
 <div class="wrap">
-
-  <!-- 1. Аккаунты -->
   <section>
     <div class="sec-head">
-      <h2>Мои аккаунты</h2>
-      <button class="add-btn" aria-label="Добавить аккаунт">+</button>
+      <h2>Парсинг</h2>
     </div>
-    <div id="accounts"></div>
-  </section>
-
-  <!-- 2. Комментарии -->
-  <section>
-    <div class="sec-head">
-      <h2>Комментарии</h2>
-      <span class="sec-meta count" id="cmt-count">0 из 0 отмечено</span>
+    <div class="input-row">
+      <input type="text" id="parse-input" placeholder="@channel 12">
+      <button id="parse-btn">Найти</button>
     </div>
     <div id="comments"></div>
   </section>
 
-  <!-- 3. Рассылка -->
   <section>
     <div class="sec-head">
-      <h2>Рассылка</h2>
-      <span id="run-badge" class="badge run">идёт</span>
+      <h2>Ручное добавление</h2>
+      <button class="add-btn" id="add-manual-btn">+ Добавить</button>
     </div>
-
-    <div class="tiles">
-      <div class="tile">
-        <div class="tile-label">Отправлено</div>
-        <div class="tile-value" id="sent">0</div>
-      </div>
-      <div class="tile">
-        <div class="tile-label">Партия</div>
-        <div class="tile-value" id="batch">50</div>
-      </div>
-    </div>
-
-    <div class="progress-card">
-      <div class="progress"><div class="progress-fill" id="pfill"></div></div>
-      <div class="status-line" id="status-line">Остановился на: — · следующая через 2 мин</div>
-    </div>
-
-    <div class="btns">
-      <button class="btn" id="toggle-btn">⏸ Стоп</button>
-      <button class="btn" id="dl-btn">⤓ Скачать .txt</button>
+    <div id="manual-list" style="background:var(--card);border:1px solid var(--border);border-radius:14px; transition: background 0.2s ease;">
+      <!-- сюда падают юзеры -->
     </div>
   </section>
 
+  <section>
+    <div class="sec-head">
+      <h2>Рассылка</h2>
+      <span id="run-badge" style="font-size:13px;background:var(--badge-bg);color:var(--accent-soft);padding:4px 10px;border-radius:999px;">готово</span>
+    </div>
+
+    <div class="tiles">
+      <div class="tile"><div class="tile-label">Отправлено</div><div class="tile-value" id="sent">0</div></div>
+      <div class="tile"><div class="tile-label">Всего</div><div class="tile-value" id="total">0</div></div>
+    </div>
+    <div class="progress"><div class="progress-fill" id="pfill"></div></div>
+
+    <div class="btns">
+      <button class="btn" id="toggle-btn">⏸ Стоп</button>
+      <button class="btn btn-primary" id="start-btn">🚀 Запуск</button>
+    </div>
+  </section>
+</div>
+
+<!-- Модалка -->
+<div class="modal-overlay" id="modal">
+  <div class="modal">
+    <h3>Добавить юзера</h3>
+    <input type="text" id="manual-input" placeholder="@username или ID">
+    <div class="modal-actions">
+      <button class="cancel" id="modal-cancel">Отмена</button>
+      <button class="confirm" id="modal-confirm">Добавить</button>
+    </div>
+  </div>
 </div>
 
 <script>
 (function(){
-  const accounts = [
-    {id:'main', name:'main', nick:'@my_nick', phone:'+7 914 *** ** 21', proxy:'прокси вкл', status:'active', av:'blue', initials:'MN'},
-    {id:'work', name:'work', nick:'@work_nick', phone:'+7 924 *** ** 08', proxy:'без прокси', status:'login', av:'purple', initials:'WK'}
-  ];
-  let selectedAccount = 'main';
-
-  const comments = [
-    {id:1, user:'@anna_k', post:'#12', text:'+ хочу, напиши', checked:true},
-    {id:2, user:'@dmitry_v', post:'#12', text:'+', checked:true},
-    {id:3, user:'@olga_s', post:'#14', text:'классный пост', checked:true},
-    {id:4, user:'@max_p', post:'#14', text:'а когда следующий?', checked:true}
-  ];
-
-  const BATCH = 50;
-
-  const accountsEl = document.getElementById('accounts');
-  function renderAccounts(){
-    accountsEl.innerHTML = accounts.map(a => {
-      const sel = a.id === selectedAccount ? ' selected' : '';
-      const badge = a.status === 'active'
-        ? '<span class="badge active">активен</span>'
-        : '<span class="badge login">нужен вход</span>';
-      const avClass = a.av === 'blue' ? 'av-blue' : 'av-purple';
-      return `
-        <div class="card acc${sel}" data-acc="${a.id}">
-          <div class="avatar ${avClass}">${a.initials}</div>
-          <div class="acc-body">
-            <div class="acc-title">${a.name} · ${a.nick}</div>
-            <div class="acc-sub">${a.phone} · ${a.proxy}</div>
-          </div>
-          ${badge}
-        </div>`;
-    }).join('');
+  // --- Переключатель темы ---
+  const themeToggle = document.getElementById('theme-toggle');
+  const iconMoon = document.getElementById('icon-moon');
+  const iconSun = document.getElementById('icon-sun');
+  
+  // Проверяем сохраненную тему или системные настройки
+  const savedTheme = localStorage.getItem('theme');
+  const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+  
+  if (savedTheme === 'light' || (!savedTheme && !prefersDark)) {
+    document.documentElement.setAttribute('data-theme', 'light');
+    iconMoon.style.display = 'none';
+    iconSun.style.display = 'block';
+  } else {
+    document.documentElement.setAttribute('data-theme', 'dark');
+    iconMoon.style.display = 'block';
+    iconSun.style.display = 'none';
   }
-  accountsEl.addEventListener('click', e => {
-    const card = e.target.closest('.acc');
-    if(!card) return;
-    selectedAccount = card.dataset.acc;
-    renderAccounts();
+
+  themeToggle.addEventListener('click', () => {
+    const current = document.documentElement.getAttribute('data-theme');
+    if (current === 'light') {
+      document.documentElement.setAttribute('data-theme', 'dark');
+      localStorage.setItem('theme', 'dark');
+      iconMoon.style.display = 'block';
+      iconSun.style.display = 'none';
+    } else {
+      document.documentElement.setAttribute('data-theme', 'light');
+      localStorage.setItem('theme', 'light');
+      iconMoon.style.display = 'none';
+      iconSun.style.display = 'block';
+    }
   });
 
-  const commentsEl = document.getElementById('comments');
-  const cmtCountEl = document.getElementById('cmt-count');
+  // --- Состояние ---
+  let parsedUsers = []; 
+  let manualUsers = []; 
+  let sent = 0;
+  let isRunning = false;
+  let timer = null;
 
-  function updateCount(){
-    const total = comments.length;
-    const on = comments.filter(c => c.checked).length;
-    cmtCountEl.textContent = `${on} из ${total} отмечено`;
-    return on;
-  }
+  // --- DOM ---
+  const parseInput = document.getElementById('parse-input');
+  const parseBtn = document.getElementById('parse-btn');
+  const commentsEl = document.getElementById('comments');
+  const manualListEl = document.getElementById('manual-list');
+  const modal = document.getElementById('modal');
+  const manualInput = document.getElementById('manual-input');
+  const addManualBtn = document.getElementById('add-manual-btn');
+  const modalCancel = document.getElementById('modal-cancel');
+  const modalConfirm = document.getElementById('modal-confirm');
+  const sentEl = document.getElementById('sent');
+  const totalEl = document.getElementById('total');
+  const pfillEl = document.getElementById('pfill');
+  const toggleBtn = document.getElementById('toggle-btn');
+  const startBtn = document.getElementById('start-btn');
+  const runBadge = document.getElementById('run-badge');
 
   function renderComments(){
-    commentsEl.innerHTML = comments.map(c => `
-      <div class="card cmt${c.checked ? ' checked' : ''}" data-cmt="${c.id}">
+    if(parsedUsers.length === 0){
+      commentsEl.innerHTML = '<div style="color:var(--muted);font-size:13px;text-align:center;padding:20px;">Нет данных. Введи @канал и номер поста.</div>';
+      return;
+    }
+    commentsEl.innerHTML = parsedUsers.map(c => `
+      <div class="card cmt${c.checked ? ' checked' : ''}" data-id="${c.id}">
         <div class="cb">
-          <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
-            <path d="M2.5 7.5L5.5 10.5L11.5 3.5" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-          </svg>
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2.5 7.5L5.5 10.5L11.5 3.5" stroke="#fff" stroke-width="2" stroke-linecap="round"/></svg>
         </div>
         <div class="cmt-body">
-          <div class="cmt-title">${c.user} <span class="meta">· пост ${c.post}</span></div>
+          <div class="cmt-title">
+            <a href="https://t.me/${c.user.replace('@','')}" target="_blank">${c.user}</a>
+            <span class="meta">· пост ${c.post}</span>
+          </div>
           <div class="cmt-text">${c.text}</div>
         </div>
       </div>
     `).join('');
-    updateCount();
+    updateStats();
   }
+
+  function renderManual(){
+    if(manualUsers.length === 0){
+      manualListEl.innerHTML = '<div style="color:var(--muted);font-size:13px;text-align:center;padding:20px;">Список пуст.</div>';
+      return;
+    }
+    manualListEl.innerHTML = manualUsers.map(u => `
+      <div class="manual-user">
+        <a href="https://t.me/${u.user.replace('@','')}" target="_blank">${u.user}</a>
+        <span class="remove" data-id="${u.id}">Удалить</span>
+      </div>
+    `).join('');
+    updateStats();
+  }
+
+  function updateStats(){
+    const checked = parsedUsers.filter(u => u.checked);
+    const total = checked.length + manualUsers.length;
+    totalEl.textContent = total;
+    pfillEl.style.width = total === 0 ? '0%' : (Math.min(100, (sent / total) * 100)) + '%';
+    sentEl.textContent = sent;
+  }
+
+  parseBtn.addEventListener('click', () => {
+    const query = parseInput.value.trim();
+    if(!query) return;
+    
+    parseBtn.textContent = '...';
+    parseBtn.disabled = true;
+    
+    setTimeout(() => {
+      const parts = query.split(' ');
+      const post = parts[1] || '12';
+      parsedUsers = [
+        {id: 1, user: '@anna_k', post: post, text: '+ хочу, напиши', checked: true},
+        {id: 2, user: '@dmitry_v', post: post, text: '+', checked: true},
+        {id: 3, user: '@olga_s', post: post, text: 'классный пост', checked: true},
+        {id: 4, user: '@max_p', post: post, text: 'а когда следующий?', checked: false}
+      ];
+      renderComments();
+      parseBtn.textContent = 'Найти';
+      parseBtn.disabled = false;
+    }, 800);
+  });
 
   commentsEl.addEventListener('click', e => {
     const card = e.target.closest('.cmt');
     if(!card) return;
-    const id = Number(card.dataset.cmt);
-    const c = comments.find(x => x.id === id);
-    if(!c) return;
-    c.checked = !c.checked;
-    card.classList.toggle('checked', c.checked);
-    updateCount();
+    if(e.target.tagName === 'A') return; // Игнорируем клик по ссылке
+    
+    const id = Number(card.dataset.id);
+    const u = parsedUsers.find(x => x.id === id);
+    if(u){ u.checked = !u.checked; renderComments(); }
   });
 
-  const sentEl = document.getElementById('sent');
-  const batchEl = document.getElementById('batch');
-  const pfillEl = document.getElementById('pfill');
-  const statusEl = document.getElementById('status-line');
-  const badgeEl = document.getElementById('run-badge');
-  const toggleBtn = document.getElementById('toggle-btn');
-  const dlBtn = document.getElementById('dl-btn');
+  addManualBtn.addEventListener('click', () => {
+    modal.classList.add('active');
+    manualInput.value = '';
+    manualInput.focus();
+  });
 
-  let sent = 0;
-  let running = true;
-  let timer = null;
-  let cycleIdx = 0;
+  modalCancel.addEventListener('click', () => modal.classList.remove('active'));
 
-  batchEl.textContent = BATCH;
+  modalConfirm.addEventListener('click', () => {
+    const val = manualInput.value.trim();
+    if(!val) return;
+    const username = val.startsWith('@') ? val : '@' + val;
+    manualUsers.push({ id: Date.now(), user: username });
+    renderManual();
+    modal.classList.remove('active');
+  });
 
-  function currentTargets(){
-    return comments.filter(c => c.checked).map(c => c.user);
-  }
+  manualListEl.addEventListener('click', e => {
+    if(e.target.classList.contains('remove')){
+      const id = Number(e.target.dataset.id);
+      manualUsers = manualUsers.filter(u => u.id !== id);
+      renderManual();
+    }
+  });
 
-  function renderProgress(){
-    sentEl.textContent = sent;
-    const pct = Math.min(100, (sent / BATCH) * 100);
-    pfillEl.style.width = pct + '%';
-
-    const targets = currentTargets();
-    if(targets.length === 0){
-      statusEl.textContent = 'Нет отмеченных получателей';
+  startBtn.addEventListener('click', () => {
+    if(isRunning) return;
+    const total = parsedUsers.filter(u => u.checked).length + manualUsers.length;
+    if(total === 0){
+      alert('Нет получателей. Отметь комменты или добавь вручную.');
       return;
     }
-    if(running && sent < BATCH){
-      const name = targets[cycleIdx % targets.length];
-      statusEl.textContent = `Остановился на: ${name} · следующая через 2 мин`;
-    } else if(sent >= BATCH){
-      statusEl.textContent = 'Партия завершена';
-    } else {
-      statusEl.textContent = 'На паузе · нажми «Старт»';
-    }
-  }
-
-  function tick(){
-    if(!running) return;
-    if(sent >= BATCH){ stop(); return; }
-    sent++;
-    cycleIdx++;
-    renderProgress();
-    if(sent >= BATCH){ stop(); }
-  }
-
-  function start(){
-    if(sent >= BATCH) sent = 0;
-    running = true;
-    badgeEl.className = 'badge run';
-    badgeEl.textContent = 'идёт';
+    isRunning = true;
+    sent = 0;
+    runBadge.textContent = 'идёт';
+    runBadge.style.color = 'var(--accent-soft)';
+    startBtn.disabled = true;
+    toggleBtn.disabled = false;
     toggleBtn.textContent = '⏸ Стоп';
-    renderProgress();
-    clearInterval(timer);
-    timer = setInterval(tick, 3000);
-  }
-
-  function stop(){
-    running = false;
-    clearInterval(timer);
-    timer = null;
-    badgeEl.className = 'badge pause';
-    badgeEl.textContent = 'пауза';
-    toggleBtn.textContent = '▶ Старт';
-    renderProgress();
-  }
+    
+    timer = setInterval(() => {
+      if(!isRunning) return;
+      sent++;
+      updateStats();
+      if(sent >= total){
+        stopMailing();
+      }
+    }, 1000);
+  });
 
   toggleBtn.addEventListener('click', () => {
-    if(running) stop(); else start();
+    if(isRunning) stopMailing();
+    else startBtn.click();
   });
 
-  dlBtn.addEventListener('click', () => {
-    const checked = comments.filter(c => c.checked);
-    if(checked.length === 0){ return; }
-    const lines = checked.map(c => `${c.user} · пост ${c.post} · ${c.text}`);
-    const blob = new Blob([lines.join('\n')], {type:'text/plain;charset=utf-8'});
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = 'recipients.txt';
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-    URL.revokeObjectURL(url);
-  });
+  function stopMailing(){
+    isRunning = false;
+    clearInterval(timer);
+    runBadge.textContent = 'пауза';
+    runBadge.style.color = 'var(--muted)';
+    startBtn.disabled = false;
+    toggleBtn.textContent = '▶ Старт';
+  }
 
-  renderAccounts();
   renderComments();
-  renderProgress();
-  timer = setInterval(tick, 3000);
+  renderManual();
 })();
 </script>
 </body>
