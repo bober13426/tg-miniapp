@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Рассылка</title>
+<style>
+  :root{
+    --bg:#161616;
+    --card:#1C1C1C;
+    --border:#2A2A2A;
+    --border-soft:#2E2E2E;
+    --text:#EDEDED;
+    --muted:#9A9A9A;
+    --accent:#2F7FE6;
+    --accent-soft:#4A90E2;
+    --green:#2DB84D;
+    --orange:#F0A030;
+  }
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+  html,body{margin:0;padding:0;background:var(--bg);color:var(--text);}
+  body{
+    font-family:-apple-system,BlinkMacSystemFont,"Roboto","Inter","Segoe UI",sans-serif;
+    -webkit-font-smoothing:antialiased;
+    font-size:14px;
+    line-height:1.4;
+  }
+  .wrap{max-width:420px;margin:0 auto;padding:24px 16px 48px;}
+  section{margin-bottom:40px;}
+  section:last-child{margin-bottom:0;}
+
+  .sec-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;}
+  .sec-head h2{margin:0;font-size:18px;font-weight:600;color:#fff;}
+  .sec-meta{font-size:13px;color:var(--muted);}
+  .sec-meta.count{white-space:nowrap;}
+
+  .add-btn{
+    width:28px;height:28px;border-radius:8px;
+    background:transparent;border:1px solid var(--border);
+    color:var(--text);font-size:18px;line-height:1;
+    display:flex;align-items:center;justify-content:center;
+    cursor:pointer;padding:0;
+    transition:background .15s ease;
+  }
+  .add-btn:hover{background:#1F1F1F;}
+  .add-btn:active{background:#252525;}
+
+  .card{
+    background:var(--card);
+    border:1px solid var(--border);
+    border-radius:14px;
+    padding:16px;
+    margin-bottom:8px;
+    transition:background .15s ease,border-color .15s ease;
+  }
+  .card:last-child{margin-bottom:0;}
+
+  /* Аккаунты */
+  .acc{display:flex;align-items:center;gap:12px;cursor:pointer;}
+  .acc.selected{background:#16202E;border-color:#1F4E8F;}
+  .avatar{
+    width:44px;height:44px;border-radius:50%;
+    display:flex;align-items:center;justify-content:center;
+    font-weight:600;font-size:15px;flex:0 0 44px;
+  }
+  .av-blue{background:#0D2A4F;color:#4A9EFF;}
+  .av-purple{background:#2A1F55;color:#8B7CF6;}
+  .acc-body{flex:1;min-width:0;}
+  .acc-title{font-size:16px;color:#fff;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+  .acc-sub{font-size:13px;color:var(--muted);margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+  .badge{
+    border-radius:999px;padding:4px 10px;font-size:13px;
+    white-space:nowrap;flex:0 0 auto;
+  }
+  .badge.active{background:rgba(45,184,77,.15);color:var(--green);}
+  .badge.login{background:rgba(240,160,48,.15);color:var(--orange);}
+  .badge.run{background:rgba(47,127,230,.15);color:var(--accent-soft);}
+  .badge.pause{background:rgba(154,154,154,.15);color:var(--muted);}
+
+  /* Комментарии */
+  .cmt{display:flex;align-items:flex-start;gap:12px;cursor:pointer;}
+  .cmt:hover{background:#202020;}
+  .cmt:active{background:#232323;}
+  .cb{
+    width:24px;height:24px;border-radius:6px;flex:0 0 24px;
+    border:2px solid #3A3A3A;background:transparent;
+    display:flex;align-items:center;justify-content:center;
+    margin-top:2px;transition:background .12s ease,border-color .12s ease;
+  }
+  .cb svg{opacity:0;transition:opacity .12s ease;}
+  .cmt.checked .cb{background:var(--accent);border-color:var(--accent);}
+  .cmt.checked .cb svg{opacity:1;}
+  .cmt-body{flex:1;min-width:0;}
+  .cmt-title{font-size:16px;color:#fff;font-weight:500;}
+  .cmt-title .meta{color:var(--muted);font-weight:400;font-size:13px;}
+  .cmt-text{font-size:14px;color:var(--muted);margin-top:3px;word-wrap:break-word;}
+
+  /* Рассылка */
+  .tiles{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px;}
+  .tile{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:16px;}
+  .tile-label{font-size:14px;color:var(--muted);}
+  .tile-value{font-size:32px;font-weight:400;color:#fff;margin-top:6px;font-variant-numeric:tabular-nums;}
+
+  .progress-card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:16px;margin-bottom:8px;}
+  .progress{height:6px;border-radius:999px;background:#262626;overflow:hidden;}
+  .progress-fill{height:100%;background:var(--accent);border-radius:999px;width:0;transition:width .5s ease;}
+  .status-line{font-size:13px;color:var(--muted);margin-top:10px;}
+
+  .btns{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
+  .btn{
+    height:48px;border-radius:12px;background:transparent;
+    border:1px solid var(--border-soft);color:#fff;
+    font-size:14px;font-weight:500;
+    display:flex;align-items:center;justify-content:center;gap:6px;
+    cursor:pointer;transition:background .15s ease,border-color .15s ease;
+    font-family:inherit;
+  }
+  .btn:hover{background:#1F1F1F;}
+  .btn:active{background:#252525;}
+  .btn:disabled{opacity:.5;cursor:default;}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <!-- 1. Аккаунты -->
+  <section>
+    <div class="sec-head">
+      <h2>Мои аккаунты</h2>
+      <button class="add-btn" aria-label="Добавить аккаунт">+</button>
+    </div>
+    <div id="accounts"></div>
+  </section>
+
+  <!-- 2. Комментарии -->
+  <section>
+    <div class="sec-head">
+      <h2>Комментарии</h2>
+      <span class="sec-meta count" id="cmt-count">0 из 0 отмечено</span>
+    </div>
+    <div id="comments"></div>
+  </section>
+
+  <!-- 3. Рассылка -->
+  <section>
+    <div class="sec-head">
+      <h2>Рассылка</h2>
+      <span id="run-badge" class="badge run">идёт</span>
+    </div>
+
+    <div class="tiles">
+      <div class="tile">
+        <div class="tile-label">Отправлено</div>
+        <div class="tile-value" id="sent">0</div>
+      </div>
+      <div class="tile">
+        <div class="tile-label">Партия</div>
+        <div class="tile-value" id="batch">50</div>
+      </div>
+    </div>
+
+    <div class="progress-card">
+      <div class="progress"><div class="progress-fill" id="pfill"></div></div>
+      <div class="status-line" id="status-line">Остановился на: — · следующая через 2 мин</div>
+    </div>
+
+    <div class="btns">
+      <button class="btn" id="toggle-btn">⏸ Стоп</button>
+      <button class="btn" id="dl-btn">⤓ Скачать .txt</button>
+    </div>
+  </section>
+
+</div>
+
+<script>
+(function(){
+  const accounts = [
+    {id:'main', name:'main', nick:'@my_nick', phone:'+7 914 *** ** 21', proxy:'прокси вкл', status:'active', av:'blue', initials:'MN'},
+    {id:'work', name:'work', nick:'@work_nick', phone:'+7 924 *** ** 08', proxy:'без прокси', status:'login', av:'purple', initials:'WK'}
+  ];
+  let selectedAccount = 'main';
+
+  const comments = [
+    {id:1, user:'@anna_k', post:'#12', text:'+ хочу, напиши', checked:true},
+    {id:2, user:'@dmitry_v', post:'#12', text:'+', checked:true},
+    {id:3, user:'@olga_s', post:'#14', text:'классный пост', checked:true},
+    {id:4, user:'@max_p', post:'#14', text:'а когда следующий?', checked:true}
+  ];
+
+  const BATCH = 50;
+
+  const accountsEl = document.getElementById('accounts');
+  function renderAccounts(){
+    accountsEl.innerHTML = accounts.map(a => {
+      const sel = a.id === selectedAccount ? ' selected' : '';
+      const badge = a.status === 'active'
+        ? '<span class="badge active">активен</span>'
+        : '<span class="badge login">нужен вход</span>';
+      const avClass = a.av === 'blue' ? 'av-blue' : 'av-purple';
+      return `
+        <div class="card acc${sel}" data-acc="${a.id}">
+          <div class="avatar ${avClass}">${a.initials}</div>
+          <div class="acc-body">
+            <div class="acc-title">${a.name} · ${a.nick}</div>
+            <div class="acc-sub">${a.phone} · ${a.proxy}</div>
+          </div>
+          ${badge}
+        </div>`;
+    }).join('');
+  }
+  accountsEl.addEventListener('click', e => {
+    const card = e.target.closest('.acc');
+    if(!card) return;
+    selectedAccount = card.dataset.acc;
+    renderAccounts();
+  });
+
+  const commentsEl = document.getElementById('comments');
+  const cmtCountEl = document.getElementById('cmt-count');
+
+  function updateCount(){
+    const total = comments.length;
+    const on = comments.filter(c => c.checked).length;
+    cmtCountEl.textContent = `${on} из ${total} отмечено`;
+    return on;
+  }
+
+  function renderComments(){
+    commentsEl.innerHTML = comments.map(c => `
+      <div class="card cmt${c.checked ? ' checked' : ''}" data-cmt="${c.id}">
+        <div class="cb">
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+            <path d="M2.5 7.5L5.5 10.5L11.5 3.5" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+        <div class="cmt-body">
+          <div class="cmt-title">${c.user} <span class="meta">· пост ${c.post}</span></div>
+          <div class="cmt-text">${c.text}</div>
+        </div>
+      </div>
+    `).join('');
+    updateCount();
+  }
+
+  commentsEl.addEventListener('click', e => {
+    const card = e.target.closest('.cmt');
+    if(!card) return;
+    const id = Number(card.dataset.cmt);
+    const c = comments.find(x => x.id === id);
+    if(!c) return;
+    c.checked = !c.checked;
+    card.classList.toggle('checked', c.checked);
+    updateCount();
+  });
+
+  const sentEl = document.getElementById('sent');
+  const batchEl = document.getElementById('batch');
+  const pfillEl = document.getElementById('pfill');
+  const statusEl = document.getElementById('status-line');
+  const badgeEl = document.getElementById('run-badge');
+  const toggleBtn = document.getElementById('toggle-btn');
+  const dlBtn = document.getElementById('dl-btn');
+
+  let sent = 0;
+  let running = true;
+  let timer = null;
+  let cycleIdx = 0;
+
+  batchEl.textContent = BATCH;
+
+  function currentTargets(){
+    return comments.filter(c => c.checked).map(c => c.user);
+  }
+
+  function renderProgress(){
+    sentEl.textContent = sent;
+    const pct = Math.min(100, (sent / BATCH) * 100);
+    pfillEl.style.width = pct + '%';
+
+    const targets = currentTargets();
+    if(targets.length === 0){
+      statusEl.textContent = 'Нет отмеченных получателей';
+      return;
+    }
+    if(running && sent < BATCH){
+      const name = targets[cycleIdx % targets.length];
+      statusEl.textContent = `Остановился на: ${name} · следующая через 2 мин`;
+    } else if(sent >= BATCH){
+      statusEl.textContent = 'Партия завершена';
+    } else {
+      statusEl.textContent = 'На паузе · нажми «Старт»';
+    }
+  }
+
+  function tick(){
+    if(!running) return;
+    if(sent >= BATCH){ stop(); return; }
+    sent++;
+    cycleIdx++;
+    renderProgress();
+    if(sent >= BATCH){ stop(); }
+  }
+
+  function start(){
+    if(sent >= BATCH) sent = 0;
+    running = true;
+    badgeEl.className = 'badge run';
+    badgeEl.textContent = 'идёт';
+    toggleBtn.textContent = '⏸ Стоп';
+    renderProgress();
+    clearInterval(timer);
+    timer = setInterval(tick, 3000);
+  }
+
+  function stop(){
+    running = false;
+    clearInterval(timer);
+    timer = null;
+    badgeEl.className = 'badge pause';
+    badgeEl.textContent = 'пауза';
+    toggleBtn.textContent = '▶ Старт';
+    renderProgress();
+  }
+
+  toggleBtn.addEventListener('click', () => {
+    if(running) stop(); else start();
+  });
+
+  dlBtn.addEventListener('click', () => {
+    const checked = comments.filter(c => c.checked);
+    if(checked.length === 0){ return; }
+    const lines = checked.map(c => `${c.user} · пост ${c.post} · ${c.text}`);
+    const blob = new Blob([lines.join('\n')], {type:'text/plain;charset=utf-8'});
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'recipients.txt';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  });
+
+  renderAccounts();
+  renderComments();
+  renderProgress();
+  timer = setInterval(tick, 3000);
+})();
+</script>
+</body>
+</html>
